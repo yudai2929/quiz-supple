@@ -1,0 +1,33 @@
+{% extends 'exam/base.html' %}
+
+{% block content %}
+<div class="container pt-5">
+    <div class="card">
+        <div class="card-header">
+          {{title}}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">問題. {{question}}</h5>
+          <hr>
+          <p class="card-text">1. {{choice1}}</p>
+          <p class="card-text">2. {{choice2}}</p>
+          <p class="card-text">3. {{choice3}}</p>
+          <p class="card-text">4. {{choice4}}</p>
+          
+          <form class="d-flex justify-content-evenly" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-secondary" name="choice1">1</button>
+              <button type="submit" class="btn btn-secondary" name="choice2">2</button>
+              <button type="submit" class="btn btn-secondary" name="choice3">3</button>
+              <button type="submit" class="btn btn-secondary" name="choice4">4</button>
+          </form>
+          
+        </div>
+        <div class="card-footer text-end">
+            {{filed}}
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

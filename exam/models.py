@@ -1,7 +1,7 @@
 from django.db import models
 
-class Qusetion(models.Model):
-    qusetion = models.CharField(max_length=255)
+class Question(models.Model):
+    question = models.CharField(max_length=255)
     filed = models.CharField(max_length=50)
     choice1 = models.CharField(max_length=255)
     choice2 = models.CharField(max_length=255)

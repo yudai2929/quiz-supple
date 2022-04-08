@@ -1,0 +1,30 @@
+{% extends 'exam/base.html' %}
+
+{% block content %}
+<div class="container pt-5">
+    <div class="card">
+        <div class="card-header">
+          {{title}}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">問題. {{question}}</h5>
+          <hr>
+          <p class="card-text">1. {{choice1}}</p>
+          <p class="card-text">2. {{choice2}}</p>
+          <p class="card-text">3. {{choice3}}</p>
+          <p class="card-text">4. {{choice4}}</p>
+    
+          <hr>
+          <p>{{judgment}}</p>
+          <p>あなたの選んだ回答は{{select_num}}です</p>
+          <a href="{{url}}" target="_blank">解説を見る</a>
+          <p class="text-end"><a class="btn btn-primary" href="{% url 'exam:quiz'%}">次の問題へ</a></p>
+        </div>
+        <div class="card-footer text-end">
+            {{filed}}
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

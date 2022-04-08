@@ -1,5 +1,9 @@
 {% extends 'exam/base.html' %}
 
 {% block content %}
-<h1>基本情報処理試験</h1>
+<div class="container text-center"> 
+    <h1>基本情報処理試験</h1>
+    <a class="btn btn-primary" href="{% url 'exam:quiz'%}">問題を解く</a>
+</div>
+
 {% endblock content %}

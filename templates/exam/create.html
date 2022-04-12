@@ -1,0 +1,54 @@
+{% extends 'exam/base.html' %}
+
+{% block content %}
+<div class="container pt-5">
+    <div class="card">
+        <div class="card-header">
+          {{title}}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">問題. {{question}}</h5>
+          <hr>
+          <p class="card-text">1. {{choice1}}</p>
+          <p class="card-text">2. {{choice2}}</p>
+          <p class="card-text">3. {{choice3}}</p>
+          <p class="card-text">4. {{choice4}}</p>
+    
+          <hr>
+          
+        <p>正解は{{answer}}です</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-check-inline">
+                <input class="form-check-input" type="radio" name="Comprehension" value="全然わからない" checked>
+                <label class="form-check-label" for="option1">
+                  全然わからない
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <input class="form-check-input" type="radio" name="Comprehension" value="ちょっとわかる">
+                <label class="form-check-label" for="option2">
+                  ちょっとわかる
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <input class="form-check-input" type="radio" name="Comprehension" value="完全に理解した">
+                <label class="form-check-label" for="option3">
+                  完全に理解した
+                </label>
+              </div>
+            <div class="text-end">
+                <a href="{% url 'exam:result'%}" class="btn btn-outline-primary">戻る</a>
+                <button type="submit" class="btn btn-primary">追加する</button>
+            </div>
+        </form>
+          
+        </div>
+        <div class="card-footer text-end">
+            {{filed}}
+        </div>
+    </div>
+    <div></div>
+</div>
+
+{% endblock content %}

@@ -15,10 +15,17 @@
           <p class="card-text">4. {{choice4}}</p>
     
           <hr>
-          <p>{{judgment}}</p>
-          <p>あなたの選んだ回答は{{select_num}}です</p>
-          <a href="{{url}}" target="_blank">解説を見る</a>
-          <p class="text-end"><a class="btn btn-primary" href="{% url 'exam:quiz'%}">次の問題へ</a></p>
+          {% if judgment %}
+            <p>正解！</p>
+          {% else %}
+            <p>不正解！正解は{{answer}}です</p>
+            <p>あなたの選んだ回答は{{select_num}}です</p> 
+          {% endif %} 
+          {% if finished %}
+            <p class="text-end"><a class="btn btn-primary" href="{% url 'exam:result'%}">結果を見る</a></p>
+          {% else %}  
+            <p class="text-end"><a class="btn btn-primary" href="{% url 'exam:quiz'%}">次の問題へ</a></p>
+          {% endif %}
         </div>
         <div class="card-footer text-end">
             {{filed}}

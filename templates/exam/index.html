@@ -1,9 +1,21 @@
 {% extends 'exam/base.html' %}
 
 {% block content %}
-<div class="container text-center"> 
-    <h1>基本情報処理試験</h1>
-    <a class="btn btn-primary" href="{% url 'exam:quiz'%}">問題を解く</a>
+<div class="container text-center position-relative " style="height:80vh">  
+    
+    <!--
+        
+    -->
+    <div class="position-absolute top-50 start-50 translate-middle">
+        <h1>基本情報処理試験</h1>
+        <hr>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">問題を解く</button>
+        </form>
+    </div>
+    
+
 </div>
 
 {% endblock content %}

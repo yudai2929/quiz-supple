@@ -1,0 +1,28 @@
+{% extends 'exam/base.html' %}
+
+{% block content %}
+{% for item in list %}
+<div class="container pt-5">
+    <div class="card">
+        <div class="card-header">
+          {{item.title}}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">問題. {{item.question}}</h5>
+          <hr>
+          {% if item.judgment %}
+            <p>正解！</p>
+          {% else %}
+            <p>不正解！</p>
+          {% endif %} 
+          <a href="{{'item.url'}}" target="_blank">解説を見る</a>
+          
+          <p class="text-end"><a class="btn btn-primary" href="{% url 'exam:create' forloop.counter0 %}">復習に追加</a></p>
+        </div>
+        <div class="card-footer text-end">
+            {{item.filed}}
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock content %}

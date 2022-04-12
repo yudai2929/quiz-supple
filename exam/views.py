@@ -1,79 +1,102 @@
-from curses import reset_prog_mode
-import re
-from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.shortcuts import render, redirect
+from django.views.generic import TemplateView, ListView, CreateView
 import csv
 import random
 from .models import Question
 
+QUESTIONS = []
+QUESTION_LENGTH = 0
+RANDOM_NUMBERS = []
+COUNTER = 0
+CORRECTS = 0
 
 #ページに表示する回数を計算するクラス
 class CountClass():
-    def __init__(self):
-        self.count = 0
+    def start(self):
+        global COUNTER
+        COUNTER = 0
 
     def add(self):
-        self.count += 1
+        global COUNTER
+        COUNTER += 1
 
     def reset(self,num):
-        if self.count == num:
-            self.count = 0
-        
+        global COUNTER
+        if COUNTER == num:
+            COUNTER = 0
+
+#問題を生成するクラス        
 class QuizClass():
     def __init__(self):
+        QUESTIONS.clear()
         path = '../exam_app/exam/files/01_aki.csv'
         with open(path, encoding='utf-8-sig') as f:
             datas = csv.DictReader(f)
-            self.questions = []
             for data in datas:
-                self.questions.append(data)
-        self.length = len(self.questions)-1
-
-# Create your views here.
+                QUESTIONS.append(data)
+        global QUESTION_LENGTH
+        QUESTION_LENGTH = len(QUESTIONS)-1
+    
+    def set_random(self,num):
+        RANDOM_NUMBERS.clear()
+        while len(RANDOM_NUMBERS) < num:
+            x = random.randint(0, QUESTION_LENGTH)
+            if not x in RANDOM_NUMBERS:
+                RANDOM_NUMBERS.append(x)
+             
+            
 class IndexView(TemplateView):
     template_name = 'exam/index.html'
 
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
+    def post(self, request, *args, **kwargs):
+        quiz = QuizClass()
+        quiz.set_random(5)
+        counter = CountClass()
+        counter.start()
+        return redirect('exam:quiz')
+        
+class TestView(TemplateView):
+    template_name = 'exam/test.html'
 
 class QuizView(TemplateView):
     
     counter = CountClass()
-    quiz = QuizClass()
-    questions = quiz.questions
-    length = quiz.length
-    random_nums = []
-    def __init__(self):
-        num = 5
-        while len(self.random_nums) < num:
-                x = random.randint(0, self.length)
-                if not x in self.random_nums:
-                    self.random_nums.append(x)
-
-        print(self.random_nums)
 
     def get(self,request):
+        params = QUESTIONS[RANDOM_NUMBERS[COUNTER]]
         self.counter.add()
-        params = self.questions[self.random_nums[self.counter.count%5]]
+        print(COUNTER)
         return render(request, 'exam/quiz.html', params)
 
     
     def post(self,request):
-        self.counter.reset(5)
-        params = self.questions[self.random_nums[self.counter.count%5]]
+        params = QUESTIONS[RANDOM_NUMBERS[COUNTER-1]]
         name='choice'
+        select_num = 0
         for i in range(4):
             if name+str(i+1) in request.POST:
                 select_num = i+1
         params['select_num'] = select_num
 
         if select_num == int(params['answer']):
-            params['judgment'] = '正解！'
+            params['judgment'] = True
         else:
-            params['judgment'] = '不正解！\n正解は{}です'.format(params['answer'])
+            params['judgment'] = False
 
+        if COUNTER == 5:
+            params['finished'] = True
 
         return render(request, 'exam/answer.html', params)
 
+class QuizResultView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        qusetion_items = []
+        for i in range(len(RANDOM_NUMBERS)):
+            qusetion_items.append(QUESTIONS[RANDOM_NUMBERS[i]])
+        params = {'list': qusetion_items}
+        return render(request, 'exam/result.html',params)
+
+class QuizCreateView(CreateView):
+    def get(self, request, index):
+        params = QUESTIONS[RANDOM_NUMBERS[index]]
+        return render(request, 'exam/create.html',params)

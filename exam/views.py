@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, ListView, CreateView
+from django.views.generic import TemplateView, ListView, CreateView, DetailView, DeleteView, UpdateView
+from django.urls import reverse, reverse_lazy
 import csv
 import random
 from .models import Question
@@ -85,6 +86,8 @@ class QuizView(TemplateView):
 
         if COUNTER == 5:
             params['finished'] = True
+        else:
+            params['finished'] = False
 
         return render(request, 'exam/answer.html', params)
 
@@ -100,3 +103,51 @@ class QuizCreateView(CreateView):
     def get(self, request, index):
         params = QUESTIONS[RANDOM_NUMBERS[index]]
         return render(request, 'exam/create.html',params)
+    
+    def post(self, request, index):
+        print(RANDOM_NUMBERS)
+        comprehension = request.POST["Comprehension"]
+        QUESTIONS[RANDOM_NUMBERS[index]].pop('select_num')
+        QUESTIONS[RANDOM_NUMBERS[index]].pop('judgment')
+        QUESTIONS[RANDOM_NUMBERS[index]].pop('finished')
+        obj = Question(**QUESTIONS[RANDOM_NUMBERS[index]],comprehension=comprehension)
+        obj.save()
+
+        RANDOM_NUMBERS.pop(index)
+        qusetion_items = []
+        for i in range(len(RANDOM_NUMBERS)):
+            qusetion_items.append(QUESTIONS[RANDOM_NUMBERS[i]])
+        params = {'list': qusetion_items}
+        print(index)
+        
+        
+        return render(request, 'exam/result.html',params)
+
+class QuizListView(ListView):
+    template_name = 'exam/list.html'
+    model = Question
+    context_object_name = 'list'
+    
+
+class QuizDetailView(DetailView):
+    template_name = 'exam/detail.html'
+    model = Question
+
+
+class QuizDeleteView(DeleteView):
+    template_name = 'exam/delete.html'
+    model = Question
+    success_url = reverse_lazy('exam:list')
+    
+
+class QuizUpdateView(TemplateView):
+    template_name = 'exam/update.html'
+    
+    def post(self, request, pk):
+        comprehension = request.POST["Comprehension"]
+        obj = Question.objects.get(pk=pk)
+        obj.comprehension = comprehension
+        obj.save()
+        return redirect('exam:list')
+    
+    

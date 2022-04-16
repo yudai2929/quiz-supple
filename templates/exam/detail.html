@@ -1,0 +1,33 @@
+{% extends 'exam/base.html' %}
+
+{% block content %}
+<div class="container pt-5">
+    <div class="card mb-3" >
+        <div class="card-header">
+          {{object.title}}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">問題. {{object.question}}</h5>
+          <hr>
+          <p class="card-text">1. {{object.choice1}}</p>
+          <p class="card-text">2. {{object.choice2}}</p>
+          <p class="card-text">3. {{object.choice3}}</p>
+          <p class="card-text">4. {{object.choice4}}</p>
+          <hr>
+          <p class="card-text">理解度：<span class="badge bg-secondary">{{question.comprehension}}</span></p>
+          <p>正解は{{object.answer}}です</p>
+          <a href="{{'object.url'}}" target="_blank">解説を見る</a>
+          
+          <p class="text-end"><a class="btn btn-primary" href="{% url 'exam:update' object.pk%}">編集する</a> <a class="btn btn-danger" href="{% url 'exam:delete' object.pk%}">削除する</a></p>
+          
+        </div>
+        <div class="card-footer text-end">
+            {{object.filed}}
+        </div>
+        
+    </div>
+
+    <p class="text-end"><a href="{% url 'exam:list'%}" class="btn btn-outline-primary">戻る</a></p>
+</div>
+
+{% endblock content %}

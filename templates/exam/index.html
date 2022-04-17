@@ -11,7 +11,28 @@
         <hr>
         <form method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-primary">問題を解く</button>
+            <div class="form-check-inline">
+                <input class="form-check-input" type="radio" name="select" value="01_aki" checked>
+                <label class="form-check-label" for="option1">
+                    令和元年秋期
+                </label>
+              </div>
+            <div class="form-check-inline">
+                <input class="form-check-input" type="radio" name="select" value="30_aki">
+                <label class="form-check-label" for="option2">
+                    平成30年秋期
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <input class="form-check-input" type="radio" name="select" value="29_aki">
+                <label class="form-check-label" for="option2">
+                    平成29年秋期
+                </label>
+            </div>
+            
+            <div class="text-center p-3">
+                <button type="submit" class="btn btn-primary">問題を解く</button>
+            </div>
         </form>
     </div>
     

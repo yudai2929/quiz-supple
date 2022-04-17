@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 class Question(models.Model):
     question = models.CharField(max_length=255)
@@ -13,6 +14,5 @@ class Question(models.Model):
     url = models.URLField()
     comprehension = models.CharField(max_length=10)
     created = models.DateTimeField(default=timezone.now())
-    
     def __str__(self):
         return self.title     

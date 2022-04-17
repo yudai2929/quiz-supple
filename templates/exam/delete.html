@@ -1,11 +1,15 @@
 {% extends 'exam/base.html' %}
 
 {% block content %}
+<div class="card" style="width: 100;padding: 5%;">
+    <div class="card-body text-center">
+        <form method="post">
+            {% csrf_token %}
+            <p class="h3 pb-2">削除します。よろしいですか？</p>
+            <input class="btn btn-danger" type="submit" value="削除する">
+        </form>
+    </div>
+  </div>
 
-<form class="d-flex justify-content-evenly" method="post">
-    {% csrf_token %}
-    <p>削除します。よろしいですか？</p>
-    <input class="btn btn-danger" type="submit" value="削除する">
-</form>
 
 {% endblock content %}

@@ -1,9 +1,11 @@
+import re
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, ListView, CreateView, DetailView, DeleteView, UpdateView
 from django.urls import reverse, reverse_lazy
 import csv
 import random
 from .models import Question
+from django.contrib.auth.models import User
 
 QUESTIONS = []
 QUESTION_LENGTH = 0
@@ -28,9 +30,9 @@ class CountClass():
 
 #問題を生成するクラス        
 class QuizClass():
-    def __init__(self):
+    def __init__(self,path):
         QUESTIONS.clear()
-        path = '../exam_app/exam/files/01_aki.csv'
+        #path = '../exam_app/exam/files/01_aki.csv'
         with open(path, encoding='utf-8-sig') as f:
             datas = csv.DictReader(f)
             for data in datas:
@@ -50,7 +52,15 @@ class IndexView(TemplateView):
     template_name = 'exam/index.html'
 
     def post(self, request, *args, **kwargs):
-        quiz = QuizClass()
+        params = {
+            '令和元年秋期':'../exam_app/exam/files/01_aki.csv',
+            '平成29年秋期':'../exam_app/exam/files/29_aki.csv',
+            '平成30年秋期':'../exam_app/exam/files/30_aki.csv'
+        }
+        
+        path = '../exam_app/exam/files/{}.csv'.format(request.POST['select'])
+        print(path)
+        quiz = QuizClass(path)
         quiz.set_random(5)
         counter = CountClass()
         counter.start()
@@ -101,11 +111,14 @@ class QuizResultView(TemplateView):
 
 class QuizCreateView(CreateView):
     def get(self, request, index):
-        params = QUESTIONS[RANDOM_NUMBERS[index]]
-        return render(request, 'exam/create.html',params)
+        try:
+            params = QUESTIONS[RANDOM_NUMBERS[index]]
+            return render(request, 'exam/create.html',params)
+        except:
+            return redirect('exam:index')
     
     def post(self, request, index):
-        print(RANDOM_NUMBERS)
+        
         comprehension = request.POST["Comprehension"]
         QUESTIONS[RANDOM_NUMBERS[index]].pop('select_num')
         QUESTIONS[RANDOM_NUMBERS[index]].pop('judgment')
@@ -118,9 +131,7 @@ class QuizCreateView(CreateView):
         for i in range(len(RANDOM_NUMBERS)):
             qusetion_items.append(QUESTIONS[RANDOM_NUMBERS[i]])
         params = {'list': qusetion_items}
-        print(index)
-        
-        
+
         return render(request, 'exam/result.html',params)
 
 class QuizListView(ListView):

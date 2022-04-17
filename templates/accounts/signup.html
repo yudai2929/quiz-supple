@@ -1,0 +1,22 @@
+{% extends 'exam/base.html' %}
+
+{% block content %}
+<div class="container pt-5" >
+    <div class="row justify-content-center">
+        <div class="col-10 col-md-5">
+            
+            <form class="form-signin" method="post">
+                {% csrf_token %}
+                <h1 class="h3 mb-3 font-weight-normal text-center">新規登録</h1>
+                <input type="text" id="inputUsername" class="form-control my-2" placeholder="User name" required autofocus name="username">
+                <input type="password" id="inputPassword" class="form-control my-2" placeholder="Password" required name="password">
+                <p class="text-center">{{error}}</p>
+                <div class="text-center">
+                    <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">新規作成</button>
+                </div>
+            </form>  
+        </div>
+    </div>    
+</div>
+
+{% endblock content %}

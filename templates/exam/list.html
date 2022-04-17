@@ -1,7 +1,11 @@
 {% extends 'exam/base.html' %}
 
 {% block content %}
+
+{% if user.is_authenticated %}
+
 {% for question in list %}
+
 <div class="container pt-5">
     <div class="card">
         <div class="card-header">
@@ -19,4 +23,7 @@
     </div>
 </div>
 {% endfor %}
+{% else %}
+<p class="text-center"><a href="{% url 'accounts:login' %}">ログインしてください</a></p>
+{% endif %}
 {% endblock content %}

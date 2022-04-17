@@ -16,7 +16,6 @@
             <p>不正解！</p>
           {% endif %} 
           <a href="{{'item.url'}}" target="_blank">解説を見る</a>
-          
           <p class="text-end"><a class="btn btn-primary" href="{% url 'exam:create' forloop.counter0 %}">復習に追加</a></p>
         </div>
         <div class="card-footer text-end">
@@ -24,5 +23,6 @@
         </div>
     </div>
 </div>
+
 {% endfor %}
 {% endblock content %}
